@@ -24,3 +24,9 @@ The ALTERnative music streaming application. (backend)
     ```
 
     The generated executable is named `alter-backend` and is in the root folder.
+
+## Codebase
+
+The code is organized as follows:
+
+- The `surrealhttp` folder contains the SurrealDB HTTP connector. 
