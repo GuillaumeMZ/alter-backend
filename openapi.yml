@@ -307,21 +307,17 @@ components:
         artist:
           type: string
         id:
-          type: integer
+          type: string
         name:
           type: string
     SongFilter:
       properties:
-        album:
-          type: string
-        artist:
-          type: string
-        name:
+        filter:
           type: string
     Playlist:
       properties:
         id:
-          type: integer
+          type: string
         name:
           type: string
         songs:
@@ -335,7 +331,7 @@ components:
     PlaylistCreationResult:
       properties:
         id:
-          type: integer
+          type: str
     PlaylistRenamingOptions:
       properties:
         newName:
