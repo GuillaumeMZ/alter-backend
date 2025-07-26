@@ -24,13 +24,12 @@ func FindByFilter(responseWriter http.ResponseWriter, request *http.Request) {
 	}
 
 	sqlQuery := "SELECT id, album, artist, name FROM songs WHERE album CONTAINS $filter OR artist CONTAINS $filter OR name CONTAINS $filter"
-	queryResult, err := surrealhttp.RunSqlQuery[Song](database.Handle, sqlQuery, []surrealhttp.QueryParameter{{Key: "filter", Value: filter.Filter}})
+	songs, err := surrealhttp.RunSingleSqlQuery[Song](database.Handle, sqlQuery, []surrealhttp.QueryParameter{{Key: "filter", Value: filter.Filter}})
 	if err != nil {
 		responseWriter.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	songs := queryResult[0].Result //there is always at least one result
 	var encodedSongs bytes.Buffer
 	err = json.NewEncoder(&encodedSongs).Encode(songs)
 	if err != nil {

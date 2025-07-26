@@ -320,6 +320,8 @@ components:
           type: string
         name:
           type: string
+        owner:
+          type: string
         songs:
           type: array
           items:
@@ -350,7 +352,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
 
 security:
   - bearerAuth: []

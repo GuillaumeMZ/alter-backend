@@ -54,7 +54,7 @@ func Connect(handle *SurrealHandle, username string, password string) error {
 	defer loginResponse.Body.Close()
 
 	if loginResponse.StatusCode != 200 {
-		return errors.New("couldn't connect to database: error code is =/= 200")
+		return errors.New("couldn't connect to database: http error code is " + strconv.Itoa(loginResponse.StatusCode))
 	}
 
 	handle.username = username
@@ -102,8 +102,9 @@ func RunSqlQuery[T any](handle SurrealHandle, query string, args []QueryParamete
 		return nil, err
 	}
 
+	encodedToken := base64.StdEncoding.EncodeToString([]byte(handle.username + ":" + handle.password))
 	request.Header.Add("Accept", "application/json")
-	request.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(handle.username+":"+handle.password)))
+	request.Header.Add("Authorization", "Basic "+encodedToken)
 	request.Header.Add("Surreal-DB", handle.database)
 	request.Header.Add("Surreal-NS", handle.namespace)
 
@@ -114,7 +115,7 @@ func RunSqlQuery[T any](handle SurrealHandle, query string, args []QueryParamete
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		return nil, errors.New("sql query failed: error code is =/= 200")
+		return nil, errors.New("sql query failed: error code is " + strconv.Itoa(response.StatusCode))
 	}
 
 	body, err := io.ReadAll(response.Body)
