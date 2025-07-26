@@ -80,14 +80,6 @@ type QueryResult[T any] struct {
 	Time   string
 }
 
-func base64Encode(source string) string {
-	data := []byte(source)
-	dst := make([]byte, base64.StdEncoding.EncodedLen(len(data)))
-	base64.StdEncoding.Encode(dst, data)
-
-	return string(dst)
-}
-
 // Runs a Sql query against a database. Use ? to denote escaped query parameters, for instance:
 // RunSqlQuery(handle, "select * from user where age > $age", []{QueryParameter{key: "age", value: "18"}})
 func RunSqlQuery[T any](handle SurrealHandle, query string, args []QueryParameter) ([]QueryResult[T], error) {
@@ -111,7 +103,7 @@ func RunSqlQuery[T any](handle SurrealHandle, query string, args []QueryParamete
 	}
 
 	request.Header.Add("Accept", "application/json")
-	request.Header.Add("Authorization", "Basic "+base64Encode(handle.username+":"+handle.password))
+	request.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(handle.username+":"+handle.password)))
 	request.Header.Add("Surreal-DB", handle.database)
 	request.Header.Add("Surreal-NS", handle.namespace)
 
@@ -136,4 +128,13 @@ func RunSqlQuery[T any](handle SurrealHandle, query string, args []QueryParamete
 	}
 
 	return results, nil
+}
+
+func RunSingleSqlQuery[T any](handle SurrealHandle, query string, args []QueryParameter) ([]T, error) {
+	results, err := RunSqlQuery[T](handle, query, args)
+	if err != nil {
+		return nil, err
+	}
+
+	return results[0].Result, nil
 }
