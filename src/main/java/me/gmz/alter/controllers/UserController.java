@@ -8,6 +8,7 @@ import me.gmz.alter.security.MissingTokenException;
 import me.gmz.alter.security.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -59,5 +60,13 @@ public class UserController {
         User user = userOptional.get();
         user.setToken(null);
         userRepository.save(user);
+    }
+
+    @Transactional
+    @PostMapping("/users/delete")
+    public void delete(@RequestHeader(name = "Authorization") String authorizationHeader) throws MissingTokenException {
+        String token = Token.extractFromHeader(authorizationHeader);
+
+        userRepository.deleteByToken(token);
     }
 }
