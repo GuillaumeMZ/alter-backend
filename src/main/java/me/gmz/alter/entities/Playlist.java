@@ -17,7 +17,7 @@ public class Playlist {
 
     @ManyToOne
     @JoinColumn(name = "owner_username")
-    private User user;
+    private User owner;
 
     @ManyToMany
     @JoinTable(
@@ -35,8 +35,8 @@ public class Playlist {
         return name;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
     public Set<Song> getSongs() {

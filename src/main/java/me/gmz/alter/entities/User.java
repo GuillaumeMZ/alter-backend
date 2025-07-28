@@ -21,7 +21,7 @@ public class User {
 
     private String token;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "owner")
     private Set<Playlist> playlists;
 
     public String getUsername() {
