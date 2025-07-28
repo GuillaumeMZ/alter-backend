@@ -22,7 +22,7 @@ public class FilterRegistrar {
     public FilterRegistrationBean<AuthenticationFilter> authenticatorRegistration(AuthenticationFilter authenticationFilter) {
         FilterRegistrationBean<AuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(authenticationFilter);
-        registrationBean.addUrlPatterns("/songs", "/playlists", "/playlists/**", "/users/signout", "/users/delete");
+        registrationBean.addUrlPatterns("/songs", "/playlists", "/playlists/*", "/playlists/*/*", "/users/signout", "/users/delete");
         registrationBean.setOrder(1);
         return registrationBean;
     }
@@ -31,7 +31,7 @@ public class FilterRegistrar {
     public FilterRegistrationBean<PlaylistOwnerAuthorizationFilter> playlistAuthorizationRegistration(PlaylistOwnerAuthorizationFilter playlistAuthorizationFilter) {
         FilterRegistrationBean<PlaylistOwnerAuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(playlistAuthorizationFilter);
-        registrationBean.addUrlPatterns("/playlists/**");
+        registrationBean.addUrlPatterns("/playlists", "/playlists/*", "/playlists/*/*");
         registrationBean.setOrder(2);
         return registrationBean;
     }

@@ -55,7 +55,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PlaylistCreationOptions"
       responses:
-        "201":
+        "200":
           description: Playlist created.
           content:
             application/json:
@@ -102,7 +102,7 @@ paths:
           required: true
           description: ID of the playlist to delete.
       responses:
-        "204":
+        "200":
           description: Playlist deleted.
         "400":
           description: Invalid request parameter.
@@ -126,7 +126,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PlaylistRenamingOptions"
       responses:
-        "204":
+        "200":
           description: Playlist renamed.
         "400":
           description: Invalid request parameter/body.

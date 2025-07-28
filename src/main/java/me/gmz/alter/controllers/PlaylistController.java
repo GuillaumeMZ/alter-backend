@@ -41,4 +41,9 @@ public class PlaylistController {
     public Playlist getSpecificPlaylist(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("playlistId") Integer playlistId) throws MissingTokenException {
         return playlistRepository.findById(playlistId).orElse(null);
     }
+
+    @DeleteMapping("/playlists/{playlistId}")
+    public void deletePlaylist(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("playlistId") Integer playlistId) {
+        playlistRepository.deleteById(playlistId);
+    }
 }
