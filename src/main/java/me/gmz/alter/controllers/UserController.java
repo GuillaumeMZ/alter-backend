@@ -4,11 +4,13 @@ import me.gmz.alter.dto.SignOptions;
 import me.gmz.alter.dto.SignResult;
 import me.gmz.alter.entities.User;
 import me.gmz.alter.repositories.UserRepository;
+import me.gmz.alter.security.MissingTokenException;
 import me.gmz.alter.security.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -43,5 +45,19 @@ public class UserController {
         return userOptional
                 .map(user -> new ResponseEntity<>(new SignResult(user.getToken()), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/users/signout")
+    public void signout(@RequestHeader(name = "Authorization") String authorizationHeader) throws MissingTokenException {
+        String token = Token.extractFromHeader(authorizationHeader);
+
+        Optional<User> userOptional = userRepository.findByToken(token);
+        if(userOptional.isEmpty()) {
+            return;
+        }
+
+        User user = userOptional.get();
+        user.setToken(null);
+        userRepository.save(user);
     }
 }

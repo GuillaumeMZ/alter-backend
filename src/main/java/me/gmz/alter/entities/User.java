@@ -50,4 +50,8 @@ public class User {
     public Set<Playlist> getPlaylists() {
         return playlists;
     }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

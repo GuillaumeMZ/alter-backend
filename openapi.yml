@@ -232,7 +232,7 @@ paths:
     post:
       summary: Logout a user.
       responses:
-        "204":
+        "200":
           description: User logged out.
         "401":
           description: Unauthenticated or invalid token.
