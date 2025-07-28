@@ -195,7 +195,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SignOptions"
       responses:
-        "201":
+        "200":
           description: A token for the newly-created user.
           content:
             application/json:

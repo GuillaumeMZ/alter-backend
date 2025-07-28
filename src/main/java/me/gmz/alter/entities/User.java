@@ -12,6 +12,13 @@ import java.util.Set;
 public class User {
     public User() { /* Empty constructor for Hibernate */ }
 
+    public User(String username, String password, Boolean admin, String token) {
+        this.username = username;
+        this.password = password;
+        this.admin = admin;
+        this.token = token;
+    }
+
     @Id
     private String username;
 
