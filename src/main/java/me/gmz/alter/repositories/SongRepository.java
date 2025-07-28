@@ -3,4 +3,8 @@ package me.gmz.alter.repositories;
 import me.gmz.alter.entities.Song;
 import org.springframework.data.repository.CrudRepository;
 
-public interface SongRepository extends CrudRepository<Song, Integer> {}
+import java.util.List;
+
+public interface SongRepository extends CrudRepository<Song, Integer> {
+    List<Song> findByAlbumContainingOrArtistContainingOrTitleContaining(String album, String artist, String title);
+}
