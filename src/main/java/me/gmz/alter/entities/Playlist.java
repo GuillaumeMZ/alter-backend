@@ -1,5 +1,7 @@
 package me.gmz.alter.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -22,6 +24,7 @@ public class Playlist {
 
     @ManyToOne
     @JoinColumn(name = "owner_username")
+    @JsonIgnore
     private User owner;
 
     @ManyToMany
@@ -30,6 +33,7 @@ public class Playlist {
             joinColumns = @JoinColumn(name = "playlist_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
+    @JsonIgnoreProperties(value = "playlists")
     private Set<Song> songs;
 
     public Integer getId() {
