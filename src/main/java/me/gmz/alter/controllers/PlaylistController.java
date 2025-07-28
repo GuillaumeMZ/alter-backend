@@ -36,4 +36,9 @@ public class PlaylistController {
         Playlist playlist = new Playlist(playlistCreationOptions.name(), owner.get());
         playlistRepository.save(playlist);
     }
+
+    @GetMapping("/playlists/{playlistId}")
+    public Playlist getSpecificPlaylist(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("playlistId") Integer playlistId) throws MissingTokenException {
+        return playlistRepository.findById(playlistId).orElse(null);
+    }
 }
