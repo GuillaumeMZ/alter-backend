@@ -1,0 +1,310 @@
+openapi: 3.0.4
+
+info:
+  title: Alter
+  description: A self-hostable music streaming application.
+  version: 0.0.1
+
+paths:
+  /songs:
+    post:
+      summary: Find a song by album/artist/name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SongFilter"
+      responses:
+        "200":
+          description: An JSON array of songs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Song"
+        "400":
+          description: Invalid request body.
+        "401":
+          description: Unauthenticated or invalid token.
+        "500":
+          description: Internal server error.
+  /playlists:
+    get:
+      summary: Returns the list of the user's playlists.
+      responses:
+        "200":
+          description: A JSON array of playlists.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Playlist"
+        "401":
+          description: Unauthenticated or invalid token.
+        "500":
+          description: Internal server error.
+    post:
+      summary: Create a new, empty playlist.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlaylistCreationOptions"
+      responses:
+        "201":
+          description: Playlist created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlaylistCreationResult"
+        "400":
+          description: Invalid request body.
+        "401":
+          description: Unauthenticated or invalid token.
+        "500":
+          description: Internal server error.
+  /playlists/{playlistId}:
+    get:
+      summary: Get a specific playlist.
+      parameters:
+        - in: path
+          name: playlistId
+          schema:
+            type: string
+          required: true
+          description: ID of the playlist to get.
+      responses:
+        "200":
+          description: Playlist found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Playlist"
+        "400":
+          description: Invalid request parameter.
+        "401":
+          description: Unauthenticated or unauthorized or invalid token.
+        "404":
+          description: Playlist not found.
+        "500":
+          description: Internal server error.
+    delete:
+      summary: Delete a playlist.
+      parameters:
+        - in: path
+          name: playlistId
+          schema:
+            type: string
+          required: true
+          description: ID of the playlist to delete.
+      responses:
+        "204":
+          description: Playlist deleted.
+        "400":
+          description: Invalid request parameter.
+        "401":
+          description: Unauthenticated or unauthorized or invalid token.
+        "500":
+          description: Internal server error.
+    patch:
+      summary: Rename a playlist.
+      parameters:
+        - in: path
+          name: playlistId
+          schema:
+            type: string
+          required: true
+          description: ID of the playlist to rename.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlaylistRenamingOptions"
+      responses:
+        "204":
+          description: Playlist renamed.
+        "400":
+          description: Invalid request parameter/body.
+        "401":
+          description: Unauthenticated or unauthorized or invalid token.
+        "500":
+          description: Internal server error.
+  /playlists/{playlistId}/{songId}:
+    post:
+      summary: Add a song to a playlist.
+      parameters:
+        - in: path
+          name: playlistId
+          schema:
+            type: string
+          required: true
+          description: ID of the playlist to add a song to.
+        - in: path
+          name: songId
+          schema:
+            type: string
+          required: true
+          description: ID of the song to add to the playlist.
+      responses:
+        "201":
+          description: Song added (or was already in the playlist).
+        "400":
+          description: Invalid request parameter.
+        "401":
+          description: Unauthenticated or unauthorized or invalid token.
+        "500":
+          description: Internal server error/song already in the playlist.
+    delete:
+      summary: Deletes a song from a playlist.
+      parameters:
+        - in: path
+          name: playlistId
+          schema:
+            type: string
+          required: true
+          description: ID of the playlist to modify.
+        - in: path
+          name: songId
+          schema:
+            type: string
+          required:
+            true
+          description: ID of the song to remove.
+      responses:
+        "204":
+          description: Song removed (or wasn't in the playlist).
+        "400":
+          description: Invalid request parameter.
+        "401":
+          description: Unauthenticated or unauthorized or invalid token.
+        "500":
+          description: Internal server error.
+  /users/signup:
+    post:
+      summary: Register a new user.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignOptions"
+      responses:
+        "201":
+          description: A token for the newly-created user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignResult"
+        "400":
+          description: Invalid request body.
+        "500":
+          description: Internal server error/user already exists.
+  /users/signin:
+    post:
+      summary: Login a user.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignOptions"
+      responses:
+        "200":
+          description: A token for the logged-in user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignResult"
+        "400":
+          description: Invalid request body.
+        "404":
+          description: Requested user doesn't exist or incorrect password.
+        "500":
+          description: Internal server error.
+  /users/signout:
+    post:
+      summary: Logout a user.
+      responses:
+        "204":
+          description: User logged out.
+        "401":
+          description: Unauthenticated or invalid token.
+        "500":
+          description: Internal server error.
+  /users/delete:
+    post:
+      summary: Delete a user.
+      responses:
+        "204": 
+          description: User deleted.
+        "401":
+          description: Unauthenticated or invalid token.
+        "500":
+          description: Internal server error.
+
+components:
+  schemas:
+    Song:
+      properties:
+        album:
+          type: string
+        artist:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+    SongFilter:
+      properties:
+        filter:
+          type: string
+    Playlist:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        songs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Song"
+    PlaylistCreationOptions:
+      properties:
+        name:
+          type: string
+    PlaylistCreationResult:
+      properties:
+        id:
+          type: str
+        owner:
+          type: str
+    PlaylistRenamingOptions:
+      properties:
+        newName:
+          type: string
+    SignOptions:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    SignResult:
+      properties:
+        token:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+security:
+  - bearerAuth: []
