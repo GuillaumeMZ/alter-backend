@@ -10,7 +10,7 @@ public class Song {
     public Song() { /* Empty constructor for Hibernate */ }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String album;

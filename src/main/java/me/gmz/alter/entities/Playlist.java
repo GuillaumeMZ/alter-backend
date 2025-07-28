@@ -9,8 +9,13 @@ import java.util.Set;
 public class Playlist {
     public Playlist() { /* Empty constructor for Hibernate */ }
 
+    public Playlist(String name, User owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
