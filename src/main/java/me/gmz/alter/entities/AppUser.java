@@ -9,14 +9,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
-    public User() { /* Empty constructor for Hibernate */ }
+public class AppUser {
+    public AppUser() { /* Empty constructor for Hibernate */ }
 
-    public User(String username, String password, Boolean admin, String token) {
+    public AppUser(String username, String password, Boolean admin) {
         this.username = username;
         this.password = password;
         this.admin = admin;
-        this.token = token;
     }
 
     @Id
@@ -25,8 +24,6 @@ public class User {
     private String password;
 
     private Boolean admin;
-
-    private String token;
 
     @OneToMany(mappedBy = "owner")
     private Set<Playlist> playlists;
@@ -43,15 +40,7 @@ public class User {
         return admin;
     }
 
-    public String getToken() {
-        return token;
-    }
-
     public Set<Playlist> getPlaylists() {
         return playlists;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

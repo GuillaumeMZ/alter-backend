@@ -6,8 +6,8 @@ info:
   version: 0.0.1
 
 paths:
-  /songs:
-    post:
+  /songs/list:
+    get:
       summary: Find a song by album/artist/name.
       requestBody:
         required: true
@@ -126,12 +126,14 @@ paths:
             schema:
               $ref: "#/components/schemas/PlaylistRenamingOptions"
       responses:
-        "200":
+        "204":
           description: Playlist renamed.
         "400":
           description: Invalid request parameter/body.
         "401":
           description: Unauthenticated or unauthorized or invalid token.
+        "404":
+          description: Playlist not found.
         "500":
           description: Internal server error.
   /playlists/{playlistId}/{songId}:
@@ -184,7 +186,7 @@ paths:
           description: Unauthenticated or unauthorized or invalid token.
         "500":
           description: Internal server error.
-  /users/signup:
+  /register:
     post:
       summary: Register a new user.
       security: []
@@ -195,16 +197,14 @@ paths:
             schema:
               $ref: "#/components/schemas/SignOptions"
       responses:
-        "200":
-          description: A token for the newly-created user.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SignResult"
+        "201":
+          description: The user has been registered.
         "400":
           description: Invalid request body.
+        "409":
+          description: The user already exists.
         "500":
-          description: Internal server error/user already exists.
+          description: Internal server error.
   /users/signin:
     post:
       summary: Login a user.

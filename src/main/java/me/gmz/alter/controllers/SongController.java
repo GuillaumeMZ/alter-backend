@@ -17,7 +17,7 @@ public class SongController {
         this.songRepository = songRepository;
     }
 
-    @GetMapping("/songs")
+    @GetMapping("/songs/list")
     public List<Song> getSongsMatchingFilter(@RequestBody SongFilter filter) {
         return songRepository.findByAlbumContainingOrArtistContainingOrTitleContaining(
                 filter.filter(),

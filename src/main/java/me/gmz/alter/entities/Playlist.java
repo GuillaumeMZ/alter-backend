@@ -11,7 +11,13 @@ import java.util.Set;
 public class Playlist {
     public Playlist() { /* Empty constructor for Hibernate */ }
 
-    public Playlist(String name, User owner) {
+    public Playlist(String name, AppUser owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+
+    public Playlist(Integer id, String name, AppUser owner) {
+        this.id = id;
         this.name = name;
         this.owner = owner;
     }
@@ -25,7 +31,7 @@ public class Playlist {
     @ManyToOne
     @JoinColumn(name = "owner_username")
     @JsonIgnore
-    private User owner;
+    private AppUser owner;
 
     @ManyToMany
     @JoinTable(
@@ -44,7 +50,7 @@ public class Playlist {
         return name;
     }
 
-    public User getOwner() {
+    public AppUser getOwner() {
         return owner;
     }
 
