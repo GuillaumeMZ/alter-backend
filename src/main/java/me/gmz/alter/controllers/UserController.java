@@ -1,15 +1,13 @@
 package me.gmz.alter.controllers;
 
 import me.gmz.alter.dto.SignOptions;
+import me.gmz.alter.dto.SignResult;
 import me.gmz.alter.entities.AppUser;
 import me.gmz.alter.repositories.UserRepository;
+import me.gmz.alter.services.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public UserController(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserController(JwtService jwtService, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
@@ -35,5 +35,10 @@ public class UserController {
         userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public SignResult login(Authentication authentication) {
+        return new SignResult(jwtService.generateToken(authentication));
     }
 }

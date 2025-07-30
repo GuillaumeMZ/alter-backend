@@ -3,6 +3,7 @@ package me.gmz.alter.controllers;
 import me.gmz.alter.dto.SongFilter;
 import me.gmz.alter.entities.Song;
 import me.gmz.alter.repositories.SongRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ public class SongController {
         this.songRepository = songRepository;
     }
 
-    @GetMapping("/songs/list")
+    @GetMapping("/songs")
     public List<Song> getSongsMatchingFilter(@RequestBody SongFilter filter) {
         return songRepository.findByAlbumContainingOrArtistContainingOrTitleContaining(
                 filter.filter(),
