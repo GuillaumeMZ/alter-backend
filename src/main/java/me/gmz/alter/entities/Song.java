@@ -19,9 +19,6 @@ public class Song {
 
     private String title;
 
-    @ManyToMany(mappedBy = "songs")
-    Set<Playlist> playlists;
-
     public Integer getId() {
         return id;
     }

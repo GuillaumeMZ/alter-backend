@@ -1,7 +1,6 @@
 package me.gmz.alter.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -33,14 +32,8 @@ public class Playlist {
     @JsonIgnore
     private AppUser owner;
 
-    @ManyToMany
-    @JoinTable(
-            name = "includes",
-            joinColumns = @JoinColumn(name = "playlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "song_id")
-    )
-    @JsonIgnoreProperties(value = "playlists")
-    private Set<Song> songs;
+    @OneToMany(mappedBy = "playlist")
+    private Set<Include> includes;
 
     public Integer getId() {
         return id;
@@ -54,7 +47,7 @@ public class Playlist {
         return owner;
     }
 
-    public Set<Song> getSongs() {
-        return songs;
+    public Set<Include> getSongs() {
+        return includes;
     }
 }
